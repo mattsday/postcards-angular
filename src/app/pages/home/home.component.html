@@ -1,5 +1,11 @@
 <gmpx-api-loader [key]="mapsApiKey"></gmpx-api-loader>
 <div class="home-container">
+  <app-info-box
+    *ngIf="errorText !== ''"
+    type="error"
+    title="Error"
+    [body]="errorText"
+  />
   <form [formGroup]="postcardForm">
     <div class="form-row">
       <mat-form-field class="text-form-s-r">
@@ -33,7 +39,7 @@
         (gmpx-placechange)="placeEvent('start', $event)"
       />
     </label>
-    <label style="margin-top: 1em;">
+    <label style="margin-top: 1em">
       Ending Point
       <gmpx-place-picker
         placeholder="Ending Point"
@@ -44,8 +50,10 @@
       />
     </label>
     <app-loading-button
+      [disabled]="postcardForm.invalid"
       [loading]="loading()"
       style="width: 100%; margin-top: 1em"
+      (click)="processForm()"
     >
       Generate Postcard
     </app-loading-button>

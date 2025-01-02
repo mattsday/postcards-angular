@@ -4,9 +4,12 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express from 'express';
+import express, { json, Request, Response } from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { StatusCodes } from 'http-status-codes';
+import { PostcardRequest } from './lib/schema/postcard-request';
+import { postcardFlow } from './lib/server/genkit/genkit';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -14,17 +17,30 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+app.use(json());
+
+app.post(
+  '/api/process',
+  async (req: Request<object, object, PostcardRequest>, res: Response) => {
+    try {
+      console.log('API request for Genkit!');
+      console.log(req.body);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const r = await postcardFlow(req.body);
+      console.log(r.story);
+      res.status(StatusCodes.OK).json(r);
+
+      // TODO: Genkit!
+    } catch (error) {
+      console.error(error);
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send('Internal Server Error');
+    } finally {
+      res.end();
+    }
+  }
+);
 
 /**
  * Serve static files from /browser
@@ -34,7 +50,7 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
-  }),
+  })
 );
 
 /**
@@ -44,7 +60,7 @@ app.use('/**', (req, res, next) => {
   angularApp
     .handle(req)
     .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
+      response ? writeResponseToNodeResponse(response, res) : next()
     )
     .catch(next);
 });

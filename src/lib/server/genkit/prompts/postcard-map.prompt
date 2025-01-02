@@ -3,17 +3,9 @@ model: vertexai/gemini-1.5-flash
 config:
   temperature: 0.9
 input:
-  schema: 
-    start: string
-    end: string
-    mapImage?: string
-    sender: string
-    recipient: string
+  schema: PostcardDescriptionStoryRequestSchema
 output:
-  format: json
-  schema:
-    description: string
-    story: string
+  schema: PostcardDescriptionStoryResponseSchema
 ---
 
 I have completed a journey from {{start}} to {{end}}.
