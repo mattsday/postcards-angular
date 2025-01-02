@@ -1,59 +1,30 @@
 # Postcards
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+**Looking to get started?** Check out [the docs](docs/README.md) for guides.
 
-## Development server
+This demo showcases [Firebase Genkit](https://firebase.google.com/docs/genkit) running inside an [Angular](https://angular.dev/) app that can be deployed onto [Firebase App Hosting](https://firebase.google.com/docs/app-hosting).
 
-To start a local development server, run:
+It was originally created for the 2024 London Summit, session [BO1.3 - Kick-start your AI journey with Google Cloud](https://cloudonair.withgoogle.com/events/london-summit-24?talk=b01-3)
 
-```bash
-ng serve
+![Example Postcard Image](images/example.jpg)
+
+## Overview
+
+This demo is built in two parts: a webapp and a Genkit development environment. Both use the same code, but have different aspects to demo. The most important thing is that it's the same codebase for both - just different tools to interact suitable for different personas and tasks.
+
+See [the documentation](docs/README.md) for more information on how to deploy this and also for an example demo script.
+
+## Using
+
+See [the docs](docs/README.md) to get started!
+
+### TL;DR
+
+```sh
+export PROJECT_ID="my-project-id"
+cd terraform
+terraform init && terraform apply -var="project_id=${PROJECT_ID}"
+cd ..
+npm install
+npx firebase-tools@latest apphosting:backends:create --project="${PROJECT_ID}"
 ```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
