@@ -1,1 +1,65 @@
-/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+
+html {
+  color-scheme: light dark;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+      height: 100%,
+    )
+  );
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  @media (prefers-color-scheme: dark) {
+    background-color: rgb(10, 10, 10);
+  }
+}
+
+:root {
+  --alert-warn-text: rgb(102, 60, 0);
+  --alert-warn-bg: rgb(255, 244, 229);
+  --alert-warn-icon: rgb(237, 108, 2);
+
+  --alert-error-text: rgb(95, 33, 32);
+  --alert-error-bg: rgb(253, 237, 237);
+  --alert-error-icon: rgb(211, 47, 47);
+
+  --alert-info-text: rgb(1, 67, 97);
+  --alert-info-bg: rgb(229, 246, 253);
+  --alert-info-icon: rgb(2, 136, 209);
+
+  --alert-success-text: rgb(30, 70, 32);
+  --alert-success-bg: rgb(237, 247, 237);
+  --alert-success-icon: rgb(46, 125, 50);
+
+  --toolbar-bg: rgb(23, 78, 166);
+  --toolbar-text: #fff;
+
+  @media (prefers-color-scheme: dark) {
+    --alert-warn-text: rgb(255, 226, 183);
+    --alert-warn-bg: rgb(25, 18, 7);
+    --alert-warn-icon: rgb(255, 167, 38);
+
+    --alert-error-text: rgb(244, 199, 199);
+    --alert-error-bg: rgb(22, 11, 11);
+    --alert-error-icon: rgb(244, 67, 54);
+
+    --alert-info-text: rgb(184, 231, 251);
+    --alert-info-bg: rgb(7, 19, 24);
+    --alert-info-icon: rgb(41, 182, 246);
+
+    --alert-success-text: rgb(204, 232, 205);
+    --alert-success-bg: rgb(12, 19, 13);
+    --alert-success-icon: rgb(102, 187, 106);
+
+    --toolbar-bg: rgb(18, 18, 18);
+    --toolbar-text: #fff;
+  }
+}

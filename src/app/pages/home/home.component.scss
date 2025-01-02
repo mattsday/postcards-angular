@@ -1,0 +1,21 @@
+.home-container {
+  justify-content: center;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 768px;
+}
+
+.text-form-full-width {
+  width: 100%;
+}
+
+.form-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.text-form-s-r {
+  width: 49%;
+}

@@ -1,0 +1,20 @@
+.nav-spacer {
+  flex: 1 1 auto;
+}
+
+.main-toolbar {
+  background-color: var(--toolbar-bg);
+  color: var(--toolbar-text);
+  margin-bottom: 1em;
+}
+
+.nav-icon {
+  color: var(--toolbar-text);
+}
+
+.top-logo {
+  width: 48;
+  height: 48;
+  margin: 0;
+  margin-right: 0.5em;
+}

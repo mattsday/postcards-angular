@@ -1,0 +1,53 @@
+<gmpx-api-loader [key]="mapsApiKey"></gmpx-api-loader>
+<div class="home-container">
+  <form [formGroup]="postcardForm">
+    <div class="form-row">
+      <mat-form-field class="text-form-s-r">
+        <mat-label>Sender</mat-label>
+        <input
+          matInput
+          #message
+          placeholder="e.g. Joe Bloggs"
+          formControlName="sender"
+          required="true"
+        />
+      </mat-form-field>
+      <mat-form-field class="text-form-s-r">
+        <mat-label>Recipient</mat-label>
+        <input
+          matInput
+          #message
+          placeholder="e.g. Joe Bloggs"
+          formControlName="recipient"
+          required="true"
+        />
+      </mat-form-field>
+    </div>
+    <label>
+      Starting Point
+      <gmpx-place-picker
+        placeholder="Starting Point"
+        id="place-picker"
+        style="width: 100%"
+        required
+        (gmpx-placechange)="placeEvent('start', $event)"
+      />
+    </label>
+    <label style="margin-top: 1em;">
+      Ending Point
+      <gmpx-place-picker
+        placeholder="Ending Point"
+        id="place-picker"
+        style="width: 100%"
+        required
+        (gmpx-placechange)="placeEvent('end', $event)"
+      />
+    </label>
+    <app-loading-button
+      [loading]="loading()"
+      style="width: 100%; margin-top: 1em"
+    >
+      Generate Postcard
+    </app-loading-button>
+  </form>
+</div>

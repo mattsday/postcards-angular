@@ -1,0 +1,30 @@
+<mat-toolbar class="main-toolbar">
+  <span>{{ appName }}</span>
+  <span class="nav-spacer"></span>
+  <div *ngIf="user$ | async">
+    {{ (user$ | async)?.displayName }}
+    <button
+      mat-icon-button
+      class="user-icon"
+      aria-label="User profile icon"
+      [matMenuTriggerFor]="menu"
+      class="nav-icon"
+    >
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item disabled>
+        <mat-icon>person</mat-icon>
+        <span>{{ (user$ | async)?.displayName || "" }}</span>
+      </button>
+      <button mat-menu-item disabled>
+        <mat-icon>email</mat-icon>
+        <span>{{ (user$ | async)?.email || "" }}</span>
+      </button>
+      <button mat-menu-item (click)="this.authService.logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

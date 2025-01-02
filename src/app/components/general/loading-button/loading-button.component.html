@@ -1,0 +1,13 @@
+<button
+  mat-button
+  color="primary"
+  [disabled]="disabled()"
+  type="submit"
+  [class]="class()"
+  [style]="style()"
+>
+  <mat-spinner *ngIf="loading()" color="accent" [diameter]="20"></mat-spinner>
+  <span *ngIf="!loading()">
+    <ng-content></ng-content>
+  </span>
+</button>

@@ -1,0 +1,27 @@
+<div
+  [ngClass]="{
+    'alert-success alert': type() === 'success',
+    'alert-error alert': type() === 'error',
+    'alert-info alert': type() === 'info',
+    'alert-warn alert': type() === 'warn',
+    'alert': true,
+  }"
+>
+  <div class="alert-body">
+    <div class="alert-icon" [ngSwitch]="type()">
+      <mat-icon *ngSwitchCase="'warn'" class="alert-icon-warn">warning</mat-icon>
+      <mat-icon *ngSwitchCase="'success'" class="alert-icon-success">check_circle</mat-icon>
+      <mat-icon *ngSwitchCase="'error'" class="alert-icon-error">error</mat-icon>
+      <mat-icon *ngSwitchCase="'info'" class="alert-icon-info">info</mat-icon>
+      <mat-icon *ngSwitchDefault>question_mark</mat-icon>
+    </div>
+    <div class="alert-text">
+      <div class="alert-title">
+        {{ title() }}
+      </div>
+      <div class="alert-message">
+        {{ body() }}
+      </div>
+    </div>
+  </div>
+</div>
