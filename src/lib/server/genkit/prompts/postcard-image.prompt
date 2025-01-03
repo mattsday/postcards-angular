@@ -1,5 +1,5 @@
 ---
-model: vertexai/imagen3
+model: vertexai/imagen3-fast
 config:
   temperature: 0.8
   aspectRatio: "4:3"

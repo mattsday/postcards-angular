@@ -1,17 +1,14 @@
 <gmpx-api-loader [key]="mapsApiKey"></gmpx-api-loader>
 <div class="home-container">
-  <app-info-box
-    *ngIf="errorText !== ''"
+  <app-alert
+    *ngIf="errorText() !== ''"
     type="error"
     title="Error"
-    [body]="errorText"
+    [body]="errorText()"
   />
   <app-postcard-response
-    *ngIf="image() !== ''"
-    [image]="image()"
-    [map]="map()"
-    [story]="story()"
-    [description]="description()"
+    [data]="data()"
+    [loading]="loading()"
   />
   <form [formGroup]="postcardForm">
     <div class="form-row">

@@ -5,6 +5,8 @@ import { renderMap } from '../maps/map-image';
 
 const project = process.env['PROJECT_ID'];
 
+const imageRetries = 1;
+
 if (!project) {
   throw new Error('PROJECT_ID is not set');
 }
@@ -98,7 +100,6 @@ export const postcardFlow = ai.defineFlow(
     const mapImage = await renderMap(postcard.start, postcard.end);
     const mapUrl = `data:image/png;base64,${mapImage}`;
 
-    console.log("Gemini prompt");
     const mapResponse = await mapPrompt({
       start: postcard.start,
       end: postcard.end,
@@ -106,27 +107,27 @@ export const postcardFlow = ai.defineFlow(
       recipient: postcard.recipient,
       mapImage: mapUrl,
     });
-    console.log("End Gemini prompt");
 
     if (!mapResponse.output?.story) {
       throw new Error('Story not generated');
     }
 
-    console.log("Image prompt");
+    try {
+      const imageResponse = await imagePrompt({
+        start: postcard.start,
+        end: postcard.end,
+        story: mapResponse.output?.story,
+      });
 
-    const imageResponse = await imagePrompt({
-      start: postcard.start,
-      end: postcard.end,
-      story: mapResponse.output?.story,
-    });
-
-    console.log("End Image prompt");
-    
-    return {
-      description: mapResponse.output?.description,
-      story: mapResponse.output?.story,
-      image: imageResponse.media?.url,
-      map: mapUrl,
-    } as PostcardResponse;
+      return {
+        description: mapResponse.output?.description,
+        story: mapResponse.output?.story,
+        image: imageResponse.media?.url,
+        map: mapUrl,
+      } as PostcardResponse;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Image generation failure - please try again');
+    }
   }
 );

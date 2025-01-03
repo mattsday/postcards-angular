@@ -31,7 +31,7 @@ app.post(
       console.error(error);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
+        .send(`${error}`);
     } finally {
       res.end();
     }

@@ -7,9 +7,19 @@
   margin-bottom: 1em;
 }
 
+.postcard-image-container {
+  max-width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .postcard {
   width: 100%;
   height: auto;
+  max-width: 1280px;
+  max-height: auto;
 }
 
 .postcard-map {
@@ -20,4 +30,13 @@
   align-items: center;
   margin-bottom: 1em;
   margin-top: 1em;
+}
+.map {
+  max-width: 640px;
+  max-height: 640px;
+  width: 100%;
+  height: auto;
+}
+.loading {
+  margin-bottom: 2em;
 }
