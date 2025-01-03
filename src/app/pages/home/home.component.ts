@@ -20,9 +20,15 @@ import '@googlemaps/extended-component-library/place_picker.js';
 
 import { environment } from '../../../environments/environment';
 import { LoadingButtonComponent } from '../../components/general/loading-button/loading-button.component';
-import { PostcardRequest, PostcardResponse } from '../../../lib/schema/postcard-request';
+import {
+  PostcardRequest,
+  PostcardResponse,
+} from '../../../lib/schema/postcard-request';
 import { Auth, idToken } from '@angular/fire/auth';
 import { Subscription } from 'rxjs';
+import { img } from './image';
+import { PostcardResponseComponent } from '../../components/postcard-response/postcard-response.component';
+import { mapImg } from './map';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +41,7 @@ import { Subscription } from 'rxjs';
     MatButtonModule,
     ReactiveFormsModule,
     LoadingButtonComponent,
+    PostcardResponseComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
@@ -42,19 +49,34 @@ import { Subscription } from 'rxjs';
 })
 export class HomeComponent {
   postcardForm = new FormGroup({
-    sender: new FormControl(''),
-    recipient: new FormControl(''),
-    start: new FormControl(''),
-    end: new FormControl(''),
+    sender: new FormControl('Matt'),
+    recipient: new FormControl('Stephanie'),
+    start: new FormControl('Battersea Power Station, London'),
+    end: new FormControl('Tower Bridge, London'),
   });
   mapsApiKey = environment.mapsPublic;
 
   loading = signal<boolean>(false);
   errorText = '';
 
-  image = signal<string>('');
-  story = signal<string>('');
-  map = signal<string>('');
+  image = signal<string>(img);
+  story = signal<string>(`Dearest Friend,
+
+I just had to send you a postcard from London! It's truly incredible here. The London Eye is a sight to behold, and the River Thames is even more beautiful in person. I'm currently enjoying a delicious cup of tea and a scone (of course!), and I can't wait to see what other adventures this city holds. Wish you were here!
+
+Best,
+
+Matt`);
+  map = signal<string>(mapImg);
+  description =
+    signal<string>(`My journey from Battersea Power Station to Tower Bridge was a delight! I took in the sights of London's most iconic landmarks, including:
+
+* **The Tate Britain:** A world-class art gallery, a must-visit for any art lover.
+* **The Houses of Parliament:** An imposing building with a rich history, a symbol of British democracy.
+* **Tower Bridge:** A stunning architectural masterpiece, offering breathtaking views of the city.
+* **Buckingham Palace:** The official residence of the Queen, a glimpse into the lives of the royal family.
+* **Borough Market:** A bustling market offering fresh produce, street food, and artisan goods.
+* **St. Paul's Cathedral:** A magnificent cathedral with stunning architecture and a history dating back to the 7th century.`);
 
   // Firebase Auth sync - to get ID token
   private auth: Auth = inject(Auth);
@@ -78,7 +100,7 @@ export class HomeComponent {
   }
 
   async processForm() {
-    if (this.postcardForm.invalid) {
+    if (this.postcardForm.invalid || this.loading()) {
       return;
     }
     if (!this.token) {
@@ -106,12 +128,13 @@ export class HomeComponent {
         this.errorText = `Voting failed: ${response.status} - ${
           errorData.message || response.statusText
         }`;
-        return
+        return;
       }
-      const data = await response.json() as PostcardResponse;
+      const data = (await response.json()) as PostcardResponse;
       this.image.set(data.image);
       this.story.set(data.story);
       this.map.set(data.map);
+      this.description.set(data.description);
     } catch (error) {
       this.errorText = `${error}`;
     } finally {

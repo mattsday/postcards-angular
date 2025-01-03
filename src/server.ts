@@ -9,7 +9,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { StatusCodes } from 'http-status-codes';
 import { PostcardRequest } from './lib/schema/postcard-request';
-import apiRoutes from './lib/server/server';
+import { postcardFlow } from './lib/server/genkit/genkit';
+import compression from 'compression';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -18,8 +19,24 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 app.use(json());
+app.use(compression());
 
-app.use('/api', apiRoutes);
+app.post(
+  '/api/process',
+  async (req: Request<object, object, PostcardRequest>, res: Response) => {
+    try {
+      const r = await postcardFlow(req.body);
+      res.status(StatusCodes.OK).json(r);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send('Internal Server Error');
+    } finally {
+      res.end();
+    }
+  }
+);
 
 /**
  * Serve static files from /browser

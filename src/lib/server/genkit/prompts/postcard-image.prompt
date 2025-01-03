@@ -2,10 +2,11 @@
 model: vertexai/imagen3
 config:
   temperature: 0.8
+  aspectRatio: "4:3"
 input:
   schema: PostcardImageRequestSchema
 output:
-    format: media
+  format: media
 ---
 
 Generate an image that captures the essence of my journey from {{start}} to {{end}}.

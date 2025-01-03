@@ -17,3 +17,4 @@ Use the context and geographical hints to extract highlights in bullet form that
 
 In addition, create a message that would be suitable to write on the back of the postcard to my {{recipient}}. My name is {{sender}}. Write the message in Markdown format. Make the message funny and at least 3 sentences.
 
+{{>example-highlights}}

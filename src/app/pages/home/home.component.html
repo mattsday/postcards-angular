@@ -6,7 +6,13 @@
     title="Error"
     [body]="errorText"
   />
-  <img *ngIf="image() !== ''" src="{{ image() }}" alt="Postcard Image" />
+  <app-postcard-response
+    *ngIf="image() !== ''"
+    [image]="image()"
+    [map]="map()"
+    [story]="story()"
+    [description]="description()"
+  />
   <form [formGroup]="postcardForm">
     <div class="form-row">
       <mat-form-field class="text-form-s-r">
@@ -51,7 +57,11 @@
       />
     </label>
     <app-loading-button
-      [disabled]="postcardForm.invalid"
+      [disabled]="
+        postcardForm.invalid ||
+        postcardForm.value.end === '' ||
+        postcardForm.value.start === ''
+      "
       [loading]="loading()"
       style="width: 100%; margin-top: 1em"
       (click)="processForm()"

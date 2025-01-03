@@ -1,4 +1,14 @@
 .main-container {
   margin: auto;
-  max-width: 768px;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  max-width: 1200px;
+  @media only screen and (max-width: 600px) {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+  @media only screen and (min-width: 768px) {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
 }

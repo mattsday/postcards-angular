@@ -74,6 +74,18 @@ export const PostcardImageRequestSchema = ai.defineSchema(
     story: z.string(),
   })
 );
+
+const mapPrompt = ai.prompt<
+  typeof PostcardDescriptionStoryRequestSchema, // Input schema
+  typeof PostcardDescriptionStoryResponseSchema, // Output schema
+  z.ZodTypeAny // Custom options schema
+>('postcard-map');
+
+const imagePrompt = ai.prompt<
+  typeof PostcardImageRequestSchema, // Input schema
+  z.ZodTypeAny // Custom options schema
+>('postcard-image');
+
 export type PostcardImageRequest = z.infer<typeof PostcardImageRequestSchema>;
 
 export const postcardFlow = ai.defineFlow(
@@ -83,21 +95,10 @@ export const postcardFlow = ai.defineFlow(
     outputSchema: PostcardResponseSchema,
   },
   async (postcard) => {
-
     const mapImage = await renderMap(postcard.start, postcard.end);
     const mapUrl = `data:image/png;base64,${mapImage}`;
 
-    const mapPrompt = ai.prompt<
-      typeof PostcardDescriptionStoryRequestSchema, // Input schema
-      typeof PostcardDescriptionStoryResponseSchema, // Output schema
-      z.ZodTypeAny // Custom options schema
-    >('postcard-map');
-
-    const imagePrompt = ai.prompt<
-      typeof PostcardImageRequestSchema, // Input schema
-      z.ZodTypeAny // Custom options schema
-    >('postcard-image');
-
+    console.log("Gemini prompt");
     const mapResponse = await mapPrompt({
       start: postcard.start,
       end: postcard.end,
@@ -105,11 +106,13 @@ export const postcardFlow = ai.defineFlow(
       recipient: postcard.recipient,
       mapImage: mapUrl,
     });
-
+    console.log("End Gemini prompt");
 
     if (!mapResponse.output?.story) {
       throw new Error('Story not generated');
     }
+
+    console.log("Image prompt");
 
     const imageResponse = await imagePrompt({
       start: postcard.start,
@@ -117,6 +120,8 @@ export const postcardFlow = ai.defineFlow(
       story: mapResponse.output?.story,
     });
 
+    console.log("End Image prompt");
+    
     return {
       description: mapResponse.output?.description,
       story: mapResponse.output?.story,
