@@ -49,10 +49,10 @@ import { AlertComponent } from "../../components/general/alert/alert.component";
 })
 export class HomeComponent {
   postcardForm = new FormGroup({
-    sender: new FormControl('Matt'),
-    recipient: new FormControl('Stephanie'),
-    start: new FormControl('Battersea Power Station, London'),
-    end: new FormControl('Tower Bridge, London'),
+    sender: new FormControl(''),
+    recipient: new FormControl(''),
+    start: new FormControl(''),
+    end: new FormControl(''),
   });
   mapsApiKey = environment.mapsPublic;
 
