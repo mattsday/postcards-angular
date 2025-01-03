@@ -7,10 +7,6 @@ const project = process.env['PROJECT_ID'];
 
 const imageRetries = 1;
 
-if (!project) {
-  throw new Error('PROJECT_ID is not set');
-}
-
 export const ai = genkit({
   plugins: [vertexAI({ projectId: project, location: 'europe-west1' })],
   promptDir: 'src/lib/server/genkit/prompts',
