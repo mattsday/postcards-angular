@@ -8,11 +8,6 @@ import {
 } from '@angular/platform-browser';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import {
-  initializeAppCheck,
-  ReCaptchaEnterpriseProvider,
-  provideAppCheck,
-} from '@angular/fire/app-check';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import {
@@ -20,7 +15,6 @@ import {
   provideRemoteConfig,
 } from '@angular/fire/remote-config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [

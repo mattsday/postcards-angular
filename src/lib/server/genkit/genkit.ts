@@ -1,10 +1,7 @@
 import { genkit, z } from 'genkit';
 import { vertexAI } from '@genkit-ai/vertexai';
-import {
-  PostcardResponse,
-} from '../../schema/postcard-request';
+import { PostcardResponse } from '../../schema/postcard-request';
 import { renderMap } from '../maps/map-image';
-import { PostcardRequestSchema, PostcardResponseSchema, PostcardDescriptionStoryRequestSchema, PostcardDescriptionStoryResponseSchema, PostcardImageRequestSchema } from './schema';
 
 const project = process.env['PROJECT_ID'];
 
@@ -14,8 +11,70 @@ if (!project) {
 
 export const ai = genkit({
   plugins: [vertexAI({ projectId: project, location: 'europe-west1' })],
-  promptDir: 'lib/server/genkit/prompts',
+  promptDir: 'src/lib/server/genkit/prompts',
 });
+
+// TODO - not sure why I can't put these in a separate file, but compilation fails if I do
+
+// Used by the client and flow as the input schema for Genkit
+export const PostcardRequestSchema = ai.defineSchema(
+  'PostcardRequestSchema',
+  z.object({
+    start: z.string(),
+    end: z.string(),
+    sender: z.string(),
+    recipient: z.string(),
+  })
+);
+
+// Sent back to the client
+export const PostcardResponseSchema = ai.defineSchema(
+  'PostcardResponseSchema',
+  z.object({
+    description: z.string(),
+    image: z.string(),
+    map: z.string(),
+    story: z.string(),
+  })
+);
+
+// Used by Gemini to create the description & story
+export const PostcardDescriptionStoryRequestSchema = ai.defineSchema(
+  'PostcardDescriptionStoryRequestSchema',
+  z.object({
+    start: z.string(),
+    end: z.string(),
+    mapImage: z.string(),
+    sender: z.string(),
+    recipient: z.string(),
+  })
+);
+export type PostcardDescriptionStoryRequest = z.infer<
+  typeof PostcardDescriptionStoryRequestSchema
+>;
+
+// The output from this LLM step
+export const PostcardDescriptionStoryResponseSchema = ai.defineSchema(
+  'PostcardDescriptionStoryResponseSchema',
+  z.object({
+    description: z.string(),
+    story: z.string(),
+  })
+);
+export type PostcardDescriptionStoryResponse = z.infer<
+  typeof PostcardDescriptionStoryResponseSchema
+>;
+
+// Used by Imagen3 to create the postcard image
+export const PostcardImageRequestSchema = ai.defineSchema(
+  'PostcardImageRequestSchema',
+  z.object({
+    start: z.string(),
+    end: z.string(),
+    story: z.string(),
+  })
+);
+export type PostcardImageRequest = z.infer<typeof PostcardImageRequestSchema>;
 
 export const postcardFlow = ai.defineFlow(
   {
@@ -24,6 +83,7 @@ export const postcardFlow = ai.defineFlow(
     outputSchema: PostcardResponseSchema,
   },
   async (postcard) => {
+
     const mapImage = await renderMap(postcard.start, postcard.end);
     const mapUrl = `data:image/png;base64,${mapImage}`;
 
@@ -43,10 +103,12 @@ export const postcardFlow = ai.defineFlow(
       end: postcard.end,
       sender: postcard.sender,
       recipient: postcard.recipient,
+      mapImage: mapUrl,
     });
 
+
     if (!mapResponse.output?.story) {
-      throw new Error("Story not generated");
+      throw new Error('Story not generated');
     }
 
     const imageResponse = await imagePrompt({
@@ -54,7 +116,6 @@ export const postcardFlow = ai.defineFlow(
       end: postcard.end,
       story: mapResponse.output?.story,
     });
-
 
     return {
       description: mapResponse.output?.description,

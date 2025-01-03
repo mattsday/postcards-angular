@@ -3,7 +3,7 @@ model: vertexai/imagen3
 config:
   temperature: 0.8
 input:
-  schema: PostcardImageRequest
+  schema: PostcardImageRequestSchema
 output:
     format: media
 ---

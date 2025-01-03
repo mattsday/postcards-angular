@@ -87,7 +87,6 @@ export async function renderMap(
       throw new Error('Cannot render map between these two points');
     }
   }
-
   // Construct Google Maps API request
   const mapURL = new URL('https://maps.googleapis.com/maps/api/staticmap');
   mapURL.searchParams.set('size', '640x640');

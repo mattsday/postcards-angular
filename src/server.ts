@@ -9,7 +9,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { StatusCodes } from 'http-status-codes';
 import { PostcardRequest } from './lib/schema/postcard-request';
-import { postcardFlow } from './lib/server/genkit/genkit';
+import apiRoutes from './lib/server/server';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -19,28 +19,7 @@ const angularApp = new AngularNodeAppEngine();
 
 app.use(json());
 
-app.post(
-  '/api/process',
-  async (req: Request<object, object, PostcardRequest>, res: Response) => {
-    try {
-      console.log('API request for Genkit!');
-      console.log(req.body);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      const r = await postcardFlow(req.body);
-      console.log(r.story);
-      res.status(StatusCodes.OK).json(r);
-
-      // TODO: Genkit!
-    } catch (error) {
-      console.error(error);
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send('Internal Server Error');
-    } finally {
-      res.end();
-    }
-  }
-);
+app.use('/api', apiRoutes);
 
 /**
  * Serve static files from /browser

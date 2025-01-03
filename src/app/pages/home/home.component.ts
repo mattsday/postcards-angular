@@ -20,7 +20,7 @@ import '@googlemaps/extended-component-library/place_picker.js';
 
 import { environment } from '../../../environments/environment';
 import { LoadingButtonComponent } from '../../components/general/loading-button/loading-button.component';
-import { PostcardRequest } from '../../../lib/schema/postcard-request';
+import { PostcardRequest, PostcardResponse } from '../../../lib/schema/postcard-request';
 import { Auth, idToken } from '@angular/fire/auth';
 import { Subscription } from 'rxjs';
 
@@ -52,6 +52,10 @@ export class HomeComponent {
   loading = signal<boolean>(false);
   errorText = '';
 
+  image = signal<string>('');
+  story = signal<string>('');
+  map = signal<string>('');
+
   // Firebase Auth sync - to get ID token
   private auth: Auth = inject(Auth);
   idTokenSubscription: Subscription;
@@ -68,12 +72,9 @@ export class HomeComponent {
   placeEvent(t: string, e: Event) {
     const eventValue = (e.target as HTMLSelectElement).value;
     const place = eventValue as unknown as google.maps.places.Place;
-    console.log(place);
     this.postcardForm.patchValue({
       [t]: `${place.displayName}, ${place.formattedAddress}` || '',
     });
-    // console.log(e);
-    console.log(this.postcardForm.value);
   }
 
   async processForm() {
@@ -105,7 +106,12 @@ export class HomeComponent {
         this.errorText = `Voting failed: ${response.status} - ${
           errorData.message || response.statusText
         }`;
+        return
       }
+      const data = await response.json() as PostcardResponse;
+      this.image.set(data.image);
+      this.story.set(data.story);
+      this.map.set(data.map);
     } catch (error) {
       this.errorText = `${error}`;
     } finally {

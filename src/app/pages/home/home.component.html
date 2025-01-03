@@ -6,6 +6,7 @@
     title="Error"
     [body]="errorText"
   />
+  <img *ngIf="image() !== ''" src="{{ image() }}" alt="Postcard Image" />
   <form [formGroup]="postcardForm">
     <div class="form-row">
       <mat-form-field class="text-form-s-r">
