@@ -6,7 +6,7 @@ This demo showcases [Firebase Genkit](https://firebase.google.com/docs/genkit) r
 
 It was originally created for the 2024 London Summit, session [BO1.3 - Kick-start your AI journey with Google Cloud](https://cloudonair.withgoogle.com/events/london-summit-24?talk=b01-3)
 
-![Example Postcard Image](images/example.jpg)
+![Example Postcard Image](images/example.webp)
 
 ## Overview
 
